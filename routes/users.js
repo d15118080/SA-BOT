@@ -1,9 +1,10 @@
 var express = require('express');
+const BotController = require("../controllers/botcontroller");
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+
+//전적조회
+router.get("/sa_user", BotController.get_sa_user);
 
 module.exports = router;
