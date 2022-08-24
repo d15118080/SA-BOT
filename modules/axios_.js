@@ -4,18 +4,21 @@ const axios = require("axios"); //통신
 const AxiosRecord = {
   //유저 넥슨 고유 아이디 가져오기
   get_sa_user_id: async (user_name, calback) => {
-    user_name = encodeURI(user_name);
+    let finduser_name = encodeURI(user_name);
     var config = {
       method: "post",
-      url: `https://barracks.sa.nexon.com/api/Search/GetSearch/${user_name}/1`,
+      url: `https://barracks.sa.nexon.com/api/Search/GetSearch/${finduser_name}/1`,
     };
 
     axios(config)
       .then(function (response) {
-        if (response.data.result.characterInfo[0]) {
+        if (response.data.result.characterInfo) {
+         let arrid =  response.data.result.characterInfo.findIndex(
+            v => v.user_nick === user_name
+          );
           calback({
             code: 0,
-            data: response.data.result.characterInfo[0].user_nexon_sn,
+            data: response.data.result.characterInfo[arrid].user_nexon_sn,
           });
         } else {
           calback({
