@@ -12,7 +12,7 @@ const AxiosRecord = {
 
     axios(config)
       .then(function (response) {
-        if (response.data.result.characterInfo) {
+        if (response.data.result.characterInfo[0]) {
          let arrid =  response.data.result.characterInfo.findIndex(
             v => v.user_nick === user_name
           );
