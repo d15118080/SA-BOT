@@ -13,13 +13,19 @@ const AxiosRecord = {
     axios(config)
       .then(function (response) {
         if (response.data.result.characterInfo[0]) {
-         let arrid =  response.data.result.characterInfo.findIndex(
+          let arrid = response.data.result.characterInfo.findIndex(
             v => v.user_nick === user_name
           );
-          calback({
-            code: 0,
-            data: response.data.result.characterInfo[arrid].user_nexon_sn,
-          });
+          if (arrid === -1) {
+            calback({
+              code: 1,
+            });
+          } else {
+            calback({
+              code: 0,
+              data: response.data.result.characterInfo[arrid].user_nexon_sn,
+            });
+          }
         } else {
           calback({
             code: 1,
