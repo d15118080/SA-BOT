@@ -4,6 +4,7 @@ const axios = require("axios"); //통신
 const AxiosRecord = {
   //유저 넥슨 고유 아이디 가져오기
   get_sa_user_id: async (user_name, calback) => {
+    user_name = encodeURI(user_name);
     var config = {
       method: "post",
       url: `https://barracks.sa.nexon.com/api/Search/GetSearch/${user_name}/1`,
