@@ -85,7 +85,6 @@ const AxiosRecord = {
       .then(function (response) {
         let OBJ = JSON.stringify(response.data.result.clanInfo);
         let JSON_DATA = JSON.parse(OBJ);
-        console.log(JSON_DATA);
         if (JSON_DATA[0]) {
           if (15 < response.data.result.total_cnt) {
             let _total_page = response.data.result.total_cnt / 15;
@@ -179,8 +178,20 @@ const AxiosRecord = {
 
     axios(config)
       .then(function (response) {
-          let data = response.data.resultClanInfo;
-          calback(data)
+        let data = response.data.resultClanInfo;
+        calback({
+          clan_name: data.clan_name,
+          clan_clan_level: data.clan_level,
+          clan_user_cnt: data.clan_user_cnt,
+          clan_exp: data.clan_exp,
+          win_cnt: data.win_cnt,
+          lose_cnt: data.lose_cnt,
+          draw_cnt: data.draw_cnt,
+          clan_ipt_time: data.clan_ipt_time,
+          total_cnt: data.total_cnt,
+          clan_win_rate: data.clan_win_rate,
+          clan_rank: data.clan_rank,
+        });
       })
       .catch(function (error) {
         console.log(error);
