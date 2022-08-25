@@ -16,6 +16,22 @@ const BotRecord = {
       }
     });
   },
+  //병영 조회
+  get_sa_user_match: async (req, res) => {
+    cs_module.get_sa_user_id(req.query.user_name, calback => {
+      if (calback.code == 0) {
+          cs_module.get_sa_user_math_20(calback.data, calback => {
+          let res_a = "";
+          for (i = 0; i < calback.result.length; i++) {
+             res_a += `맵이름 : ${calback.result[i].map_name} \n `;
+          }
+          res.json(Return(200, "조회완료", res_a));
+        });
+      } else {
+        res.json(Return(422, "존재하지 않는 닉네임 입니다."));
+      }
+    });
+  },
   //클랜 조회
   get_sa_clan: async (req, res) => {
     cs_module.get_sa_clan_id(req.query.clan_name, calback => {

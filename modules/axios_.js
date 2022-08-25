@@ -90,6 +90,57 @@ const AxiosRecord = {
         // console.log(error);
       });
   },
+
+  //유저 프로필 정보
+  get_sa_user_profile: async (user_sa_id, calback) => {
+    var config = {
+      method: "post",
+      url: `https://barracks.sa.nexon.com/api/Profile/GetProfileMain/${user_sa_id}`,
+    };
+
+    axios(config)
+      .then(function (response) {
+        let data = response.data.result;
+        calback({
+          user_nick: data.characterInfo.user_nick,
+          level_no: data.characterInfo.level_no,
+          season_level_no: data.characterInfo.season_level_no,
+          sason_rank_no: data.characterInfo.rank_no,
+          total_rank_no: data.characterInfo.total_rank_no,
+          user_grade_ranking: data.characterInfo.user_grade_ranking,
+          win_per: data.battleInfo.win_per,
+          kill_death_per: data.battleInfo.kill_death_per,
+          ar_per: data.battleInfo.ar_per,
+          sr_per: data.battleInfo.sr_per,
+          user_nexon_sn: data.characterInfo.user_nexon_sn,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
+
+  //최근매치 20건 가져오기
+  get_sa_user_math_20: async (user_id, calback) => {
+    try {
+      var config = {
+        method: "post",
+        url: "https://barracks.sa.nexon.com/api/Match/GetMatchList/",
+          data: {
+            user_nexon_sn: user_id
+        },
+      };
+
+      axios(config)
+        .then(function (response) {
+          return calback(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } catch (err) {}
+  },
+
   //클랜 고유 아이디 가져오기
   get_sa_clan_id: async (clan_name, calback) => {
     let replace_str = clan_name.replace(/\|/g, "");
@@ -158,34 +209,7 @@ const AxiosRecord = {
         // console.log(error);
       });
   },
-  //유저 프로필 정보 + 최근 매치 기록
-  get_sa_user_profile: async (user_sa_id, calback) => {
-    var config = {
-      method: "post",
-      url: `https://barracks.sa.nexon.com/api/Profile/GetProfileMain/${user_sa_id}`,
-    };
 
-    axios(config)
-      .then(function (response) {
-        let data = response.data.result;
-        calback({
-          user_nick: data.characterInfo.user_nick,
-          level_no: data.characterInfo.level_no,
-          season_level_no: data.characterInfo.season_level_no,
-          sason_rank_no: data.characterInfo.rank_no,
-          total_rank_no: data.characterInfo.total_rank_no,
-          user_grade_ranking: data.characterInfo.user_grade_ranking,
-          win_per: data.battleInfo.win_per,
-          kill_death_per: data.battleInfo.kill_death_per,
-          ar_per: data.battleInfo.ar_per,
-          sr_per: data.battleInfo.sr_per,
-          user_nexon_sn: data.characterInfo.user_nexon_sn,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  },
   //클랜 정보 가쟈오기
   get_sa_clan_profile: async (clan_id, calback) => {
     var config = {
@@ -215,6 +239,7 @@ const AxiosRecord = {
         console.log(error);
       });
   },
+
   //핑퐁
   get_ping_pong_msg: async (text, calback) => {
     var data = JSON.stringify({
