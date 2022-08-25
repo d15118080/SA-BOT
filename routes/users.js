@@ -9,4 +9,7 @@ router.get("/sa_user", BotController.get_sa_user);
 //클랜 조회
 router.get("/sa_clan", BotController.get_sa_clan);
 
+//핑봉 AI대화
+router.get("/sa_ping_pong", BotController.get_ping_pong);
+
 module.exports = router;

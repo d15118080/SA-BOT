@@ -71,7 +71,6 @@ const AxiosRecord = {
         // console.log(error);
       });
   },
-
   //클랜 고유 아이디 가져오기
   get_sa_clan_id: async (clan_name, calback) => {
     let replace_str = clan_name.replace(/\|/g, "");
@@ -192,6 +191,31 @@ const AxiosRecord = {
           clan_win_rate: data.clan_win_rate,
           clan_rank: data.clan_rank,
         });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
+  //핑퐁
+  get_ping_pong_msg: async (text, calback) => {
+    var data = JSON.stringify({
+      request: {
+        query: text,
+      },
+    });
+    var config = {
+      method: "post",
+      url: "https://builder.pingpong.us/api/builder/6262cb22e4b019e73853b0f4/integration/v0.2/custom/6262cb22e4b019e73853b0f4",
+      headers: {
+        Authorization: "Basic a2V5OjlhMGVjMGJjZGQ1NTY4N2JlZGE3M2Y1NGI4YWExY2Vm",
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    axios(config)
+      .then(function (response) {
+      return calback(response.data.response.replies[0].text);
       })
       .catch(function (error) {
         console.log(error);

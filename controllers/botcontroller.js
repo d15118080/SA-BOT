@@ -16,6 +16,7 @@ const BotRecord = {
       }
     });
   },
+  //클랜 조회
   get_sa_clan: async (req, res) => {
     cs_module.get_sa_clan_id(req.query.clan_name, calback => {
       if (calback.code == 0) {
@@ -25,6 +26,11 @@ const BotRecord = {
       } else {
         res.json(Return(422, "존재하지 않는 클랜 입니다."));
       }
+    });
+  },
+  get_ping_pong: async (req, res) => {
+    cs_module.get_ping_pong_msg(req.query.msg, calback => {
+      res.json(Return(200, "정상", calback));
     });
   },
 };
