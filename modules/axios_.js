@@ -93,6 +93,7 @@ const AxiosRecord = {
           kill_death_per: data.battleInfo.kill_death_per,
           ar_per: data.battleInfo.ar_per,
           sr_per: data.battleInfo.sr_per,
+          user_nexon_sn: data.characterInfo.user_nexon_sn,
         });
       })
       .catch(function (error) {
