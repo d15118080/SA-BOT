@@ -14,17 +14,20 @@ const AxiosRecord = {
 
     axios(config)
       .then(function (response) {
-        if (response.data.result.characterInfo[0]) {
+          if (response.data.result.characterInfo[0]) {
+    
           if (15 < response.data.result.total_cnt) {
             let _total_page = response.data.result.total_cnt / 15;
             let total_pate = Math.floor(Number(_total_page));
 
-            for (var i = 1; i < total_pate; i++) {
+              for (var i = 1; i < total_pate+1; i++) {
+                console.log(i)
               const TestApiCall = async () => {
                 try {
                   const response = await axios.post(
                     `https://barracks.sa.nexon.com/api/Search/GetSearchAll/${finduser_name}/${i}`
                   );
+                    
                   if (response.data.result.characterInfo[0]) {
                     let arrid = response.data.result.characterInfo.findIndex(
                       v => v.user_nick === user_name
