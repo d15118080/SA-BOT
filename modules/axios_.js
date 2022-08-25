@@ -14,14 +14,11 @@ const AxiosRecord = {
 
     axios(config)
       .then(function (response) {
-          if (response.data.result.characterInfo[0]) {
-    
+        if (response.data.result.characterInfo[0]) {
           if (15 < response.data.result.total_cnt) {
             let _total_page = response.data.result.total_cnt / 15;
-            let total_pate = Math.floor(Number(_total_page));
-
+            let total_pate = Math.round(Number(_total_page));
               for (var i = 1; i < total_pate+1; i++) {
-                console.log(i)
               const TestApiCall = async () => {
                 try {
                   const response = await axios.post(
@@ -39,7 +36,7 @@ const AxiosRecord = {
                           .user_nexon_sn,
                       });
                     }
-                  } else if (i < total_pate) {
+                  } else if (i < total_pate+1) {
                     return calback({
                       code: 1,
                     });
@@ -66,9 +63,9 @@ const AxiosRecord = {
             }
           }
         } else {
-        return calback({
-          code: 1,
-        });
+          return calback({
+            code: 1,
+          });
         }
       })
       .catch(function (error) {
