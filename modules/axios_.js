@@ -3,38 +3,73 @@ const axios = require("axios"); //통신
 
 const AxiosRecord = {
   //유저 넥슨 고유 아이디 가져오기
-    get_sa_user_id: async (user_name, calback) => {
+
+  get_sa_user_id: async (user_name, calback) => {
     let replace_str = user_name.replace(/\?/g, "");
     let finduser_name = encodeURI(replace_str);
     var config = {
       method: "post",
-      url: `https://barracks.sa.nexon.com/api/Search/GetSearch/${finduser_name}/1`,
+      url: `https://barracks.sa.nexon.com/api/Search/GetSearchAll/${finduser_name}/1`,
     };
 
     axios(config)
       .then(function (response) {
         if (response.data.result.characterInfo[0]) {
-          let arrid = response.data.result.characterInfo.findIndex(
-            v => v.user_nick === user_name
-          );
-          if (arrid === -1) {
-            calback({
-              code: 1,
-            });
+          if (15 < response.data.result.total_cnt) {
+            let _total_page = response.data.result.total_cnt / 15;
+            let total_pate = Math.floor(Number(_total_page));
+
+            for (var i = 1; i < total_pate; i++) {
+              const TestApiCall = async () => {
+                try {
+                  const response = await axios.post(
+                    `https://barracks.sa.nexon.com/api/Search/GetSearchAll/${finduser_name}/${i}`
+                  );
+                  if (response.data.result.characterInfo[0]) {
+                    let arrid = response.data.result.characterInfo.findIndex(
+                      v => v.user_nick === user_name
+                    );
+                    if (arrid != -1) {
+                      return calback({
+                        code: 0,
+                        data: response.data.result.characterInfo[arrid]
+                          .user_nexon_sn,
+                      });
+                    }
+                  } else if (i < total_pate) {
+                    return calback({
+                      code: 1,
+                    });
+                  }
+                } catch (err) {
+                  console.log("Error >>", err);
+                }
+              };
+              TestApiCall();
+            }
           } else {
-            calback({
-              code: 0,
-              data: response.data.result.characterInfo[arrid].user_nexon_sn,
-            });
+            let arrid = response.data.result.characterInfo.findIndex(
+              v => v.user_nick === user_name
+            );
+            if (arrid === -1) {
+              return calback({
+                code: 1,
+              });
+            } else {
+              return calback({
+                code: 0,
+                data: response.data.result.characterInfo[arrid].user_nexon_sn,
+              });
+            }
           }
         } else {
-          calback({
-            code: 1,
-          });
+        return calback({
+          code: 1,
+        });
         }
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   },
   //유저 프로필 정보 + 최근 매치 기록
