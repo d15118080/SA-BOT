@@ -8,58 +8,77 @@ const AxiosRecord = {
     let finduser_name = encodeURI(replace_str);
     var config = {
       method: "post",
-      url: `https://barracks.sa.nexon.com/api/Search/GetSearchAll/${finduser_name}/1`,
+      url: `https://barracks.sa.nexon.com/api/Search/GetSearch/${finduser_name}/1`,
     };
 
     axios(config)
       .then(function (response) {
         if (response.data.result.characterInfo[0]) {
-          if (15 < response.data.result.total_cnt) {
-            let _total_page = response.data.result.total_cnt / 15;
-            let total_pate = Math.round(Number(_total_page));
-            for (var i = 1; i < total_pate + 1; i++) {
-              const TestApiCall = async () => {
-                try {
-                  const response = await axios.post(
-                    `https://barracks.sa.nexon.com/api/Search/GetSearchAll/${finduser_name}/${i}`
-                  );
-
-                  if (response.data.result.characterInfo[0]) {
-                    let arrid = response.data.result.characterInfo.findIndex(
-                      v => v.user_nick === user_name
-                    );
-                    if (arrid != -1) {
-                      return calback({
-                        code: 0,
-                        data: response.data.result.characterInfo[arrid]
-                          .user_nexon_sn,
-                      });
-                    }
-                  } else if (i < total_pate + 1) {
-                    return calback({
-                      code: 1,
-                    });
-                  }
-                } catch (err) {
-                  console.log("Error >>", err);
-                }
-              };
-              TestApiCall();
-            }
+          let arrid = response.data.result.characterInfo.findIndex(
+            v => v.user_nick === user_name
+          );
+          if (arrid != -1) {
+            return calback({
+              code: 0,
+              data: response.data.result.characterInfo[arrid].user_nexon_sn,
+            });
           } else {
-            let arrid = response.data.result.characterInfo.findIndex(
-              v => v.user_nick === user_name
-            );
-            if (arrid === -1) {
-              return calback({
-                code: 1,
-              });
-            } else {
-              return calback({
-                code: 0,
-                data: response.data.result.characterInfo[arrid].user_nexon_sn,
-              });
-            }
+            var config = {
+              method: "post",
+              url: `https://barracks.sa.nexon.com/api/Search/GetSearchAll/${finduser_name}/1`,
+            };
+
+            axios(config).then(function (response) {
+              if (15 < response.data.result.total_cnt) {
+                let _total_page = response.data.result.total_cnt / 15;
+                let total_pate = Math.round(Number(_total_page));
+                for (var i = 1; i < total_pate + 1; i++) {
+                  const TestApiCall = async () => {
+                    try {
+                      const response = await axios.post(
+                        `https://barracks.sa.nexon.com/api/Search/GetSearchAll/${finduser_name}/${i}`
+                      );
+
+                      if (response.data.result.characterInfo[0]) {
+                        let arrid =
+                          response.data.result.characterInfo.findIndex(
+                            v => v.user_nick === user_name
+                          );
+                        if (arrid != -1) {
+                          return calback({
+                            code: 0,
+                            data: response.data.result.characterInfo[arrid]
+                              .user_nexon_sn,
+                          });
+                        }
+                      } else if (i < total_pate + 1) {
+                        return calback({
+                          code: 1,
+                        });
+                      }
+                    } catch (err) {
+                      console.log("Error >>", err);
+                    }
+                  };
+                  TestApiCall();
+                }
+              } else {
+                let arrid = response.data.result.characterInfo.findIndex(
+                  v => v.user_nick === user_name
+                );
+                if (arrid === -1) {
+                  return calback({
+                    code: 1,
+                  });
+                } else {
+                  return calback({
+                    code: 0,
+                    data: response.data.result.characterInfo[arrid]
+                      .user_nexon_sn,
+                  });
+                }
+              }
+            });
           }
         } else {
           return calback({
@@ -215,7 +234,7 @@ const AxiosRecord = {
 
     axios(config)
       .then(function (response) {
-      return calback(response.data.response.replies[0].text);
+        return calback(response.data.response.replies[0].text);
       })
       .catch(function (error) {
         console.log(error);
