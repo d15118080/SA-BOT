@@ -23,7 +23,7 @@ const BotRecord = {
           cs_module.get_sa_user_math_20(calback.data, calback => {
           let res_a = "";
           for (i = 0; i < calback.result.length; i++) {
-             res_a += `맵이름 : ${calback.result[i].map_name} \n `;
+             res_a += `맵이름 : ${calback.result[i].map_name}(${calback.result[i].match_time}/${calback.result[i].result_wdl})\n매치 정보 : ${calback.result[i].match_name}\nK/D/H/A : ${calback.result[i].kill_cnt}K/${calback.result[i].death_cnt}D/${calback.result[i].head_cnt}H/${calback.result[i].assist_cnt}A\n대미지 : ${calback.result[i].damage_cnt}\n----`;
           }
           res.json(Return(200, "조회완료", res_a));
         });
