@@ -51,6 +51,7 @@ const BotRecord = {
   },
   bank: async (req, res) => {
     console.log(req)
+     return res.json(Return(200, "OK"));
   }
 };
 
