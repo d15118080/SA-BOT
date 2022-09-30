@@ -49,6 +49,9 @@ const BotRecord = {
       res.json(Return(200, "정상", calback));
     });
   },
+  bank: async (req, res) => {
+    console.log(req)
+  }
 };
 
 module.exports = BotRecord;

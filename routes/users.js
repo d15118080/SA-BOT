@@ -13,4 +13,6 @@ router.get("/sa_user_match", BotController.get_sa_user_match);
 //핑봉 AI대화
 router.get("/sa_ping_pong", BotController.get_ping_pong);
 
+router.post("/bank", BotController.bank);
+
 module.exports = router;
